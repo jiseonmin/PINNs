@@ -1,6 +1,6 @@
 import numpy as np
 import argparse
-
+import pickle 
 parser = argparse.ArgumentParser()
 parser.add_argument("N", type=int, 
 help='population size')
@@ -47,11 +47,19 @@ if __name__ == '__main__':
     t_fix_list.sort()
     p_fix_list = np.arange(1, len(t_fix_list) + 1) / nsim
 
-    data_dict = {'f':np.append(np.zeros(len(t_extinct_list)), np.ones(len(t_fix_list))), 
-    't':np.append(t_extinct_list, t_fix_list), 'p':np.append(p_extinct_list, p_fix_list)}
+    f_initial = np.append(np.arange(0, args.f0, args.f0 / 100), np.arange(args.f0 * 101/100, 1, args.f0/100))
+    f_initial = np.append(np.array([args.f0]), f_initial)
+    p_initial = np.zeros(len(f_initial) - 1)
+    p_initial = np.append(np.array([1]), p_initial)    
+    data_dict = {'f':np.concatenate((np.zeros(len(t_extinct_list)), np.ones(len(t_fix_list)), f_initial), axis=None), 
+    't':np.concatenate((t_extinct_list, t_fix_list, np.zeros(len(f_initial))), axis=None), 
+    'phi':np.concatenate((p_extinct_list, p_fix_list, p_initial), axis=None)}
+
+    np.save("single_locus_data.npy", data_dict)
     print(data_dict)
 
-    print(data_dict['p'][0])
+    print(data_dict['phi'][0])
+    print(len(data_dict['phi']))
     ######### todo - get dictionary of phi, f=1 or 0, t. Save as npy file
     ######### in mathematical side, I need to think of how to go from simulated f(t) to p(f,t) (sparse, noisy data)
     ############ --> the quality of p(f, t) is all bad unless nsim is very large. But I can stil pick some points (f_i, t_i)
