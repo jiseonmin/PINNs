@@ -37,8 +37,8 @@ class PhysicsInformedNN:
         self.weights, self.biases = self.initialize_NN(layers)        
         
         # Initialize parameters
-        self.s = tf.Variable([0.0], dtype=tf.float32)
-        self.N = tf.Variable([0.0], dtype=tf.float32)
+        self.s = tf.Variable([0.1], dtype=tf.float32)
+        self.N = tf.Variable([800], dtype=tf.float32) ### don't put 0 for N! (leads to 1/N -> inf!)
         
         # tf placeholders and graph
         self.sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True,
@@ -62,7 +62,7 @@ class PhysicsInformedNN:
         #                                                                    'maxls': 50,
         #                                                                    'ftol' : 1.0 * np.finfo(float).eps})        
         
-        self.optimizer_Adam = tf.train.AdamOptimizer(learning_rate=1e-5)
+        self.optimizer_Adam = tf.train.AdamOptimizer(learning_rate=1e-2)
         self.train_op_Adam = self.optimizer_Adam.minimize(self.loss)                    
         
         init = tf.global_variables_initializer()
@@ -155,7 +155,7 @@ if __name__ == "__main__":
       
     N_train = 5000
     
-    layers = [2, 20, 2]
+    layers = [2, 20, 20, 20, 2]
     
     # Load Data # replace with something else (also will make .pkl file)
     data = np.load('single_locus_data.npy', allow_pickle='TRUE')
