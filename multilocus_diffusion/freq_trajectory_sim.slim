@@ -65,7 +65,8 @@ initialize() {
 	mut2_matrix = matrix(c(homo_dom_2, hetero_2, homo_rec_2), ncol = 3);
 	genotype_matrix = matrixMult(t(mut1_matrix), mut2_matrix);
 	cat(sim.cycle + " ");
-	catn(genotype_matrix / N);
+	cat(genotype_matrix / N);
+	catn(" " + S1 + " " + S2 + " " + MU1 + " " + MU2 + " " + R + " " + N);
 
 /// Extend to diploid population (AABB, AABb, AAbb, AaBB, AaBb, Aabb, aaBB, aaBb, aabb)
 /// How to get individuals' genotype fast? 
